@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="nthnn's Official Website" />
+    <meta name="keywords" content="nthnn" />
+    <meta name="author" content="nthnn, nathannestein" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
+
+    <title>Librarium | Dashboard</title>
+
+    <link href="./styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="./styles/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="./styles/dashboard.css" rel="stylesheet" />
+    <link href="./assets/ic-librarium.ico" rel="shortcut icon" />
+</head>
+<body class="bg-primary">
+    <div class="row pt-2">
+        <div class="col-4">
+            <div class="container mx-4 pt-4">
+                <div class="card border">
+                    <div class="card-header" align="center">
+                        <div class="mt-3"></div>
+                        <h1 class="card-title">Admin</h1>
+                        <div class="mt-3"></div>
+                    </div>
+                    <div class="card-body" align="left">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active w-100 py-2" id="v-pills-dashboard-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dashboard" type="button" role="tab" aria-controls="v-pills-dashboard" aria-selected="true">Dashboard</button>
+                            <button class="nav-link w-100 py-2" id="v-pills-books-tab" data-bs-toggle="pill" data-bs-target="#v-pills-books" type="button" role="tab" aria-controls="v-pills-books" aria-selected="false">Books</button>
+                            <button class="nav-link w-100 py-2" id="v-pills-students-tab" data-bs-toggle="pill" data-bs-target="#v-pills-students" type="button" role="tab" aria-controls="v-pills-students" aria-selected="false">Students</button>
+                            <button class="nav-link w-100 py-2" id="v-pills-scanner-tab" data-bs-toggle="pill" data-bs-target="#v-pills-scanner" type="button" role="tab" aria-controls="v-pills-scanner" aria-selected="false">Scanner</button>
+                            <hr/>
+                
+                            <button class="nav-link w-100 py-2" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
+                        </div>
+                    </div>
+                    <div class="card-footer py-3" align="right">
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#logout-modal">Log-out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="container pt-4">
+                <div class="card card-body border mx-4">
+                    <div class="tab-content px-2" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-dashboard" role="tabpanel" aria-labelledby="v-pills-dashboard-tab">
+                            <h1>Dashboard</h1>
+                            <hr/>
+
+                            <div class="row" align="center">
+                                <div class="col-3">
+                                    <div class="border border-2 border-dark p-2 rounded">
+                                        <p class="m-0 p-0">Total Borrowed</p>
+                                        <h2 id="total-borrowed" class="m-0 p-0">0</h2>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="border border-2 border-dark p-2 rounded">
+                                        <p class="m-0 p-0">Total Returned</p>
+                                        <h2 id="total-returned" class="m-0 p-0">0</h2>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="border border-2 border-dark p-2 rounded">
+                                        <p class="m-0 p-0">Overdue Books</p>
+                                        <h2 id="overdue-books" class="m-0 p-0">0</h2>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="border border-2 border-dark p-2 rounded">
+                                        <p class="m-0 p-0">Num. of Stocks</p>
+                                        <h2 id="num-of-stocks" class="m-0 p-0">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <h4 class="mt-4">Recent Data</h4>
+                            <table class="table table-responsive table-hover" id="recent-data-table">
+                                <thead>
+                                    <th>Book Title</th>
+                                    <th>Date Borrowed</th>
+                                    <th>Due Date</th>
+                                    <th>Date Returned</th>
+                                    <th>Borrowing Student</th>
+                                </thead>
+                                <tbody id="recent-data-tbody"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-books" role="tabpanel" aria-labelledby="v-pills-books-tab">
+                            <h1>Books</h1>
+                            <hr/>
+
+                            <table class="table table-responsive table-hover" id="books-table">
+                                <thead>
+                                    <th>Book Title</th>
+                                    <th>Author</th>
+                                    <th>Publisher</th>
+                                    <th>Publication Date</th>
+                                    <th>No. of Copies</th>
+                                    <th>Options</th>
+                                </thead>
+                                <tbody id="books-tbody"></tbody>
+                            </table>
+
+                            <div align="right">
+                                <button class="btn btn-outline-primary w-25 mx-1" data-bs-toggle="modal" data-bs-target="#add-book-modal">Add Book</button>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-students" role="tabpanel" aria-labelledby="v-pills-students-tab">
+                            <h1>Students</h1>
+                            <hr/>
+
+                            <table class="table table-responsive table-hover" id="students-table">
+                                <thead>
+                                    <th>Student Number</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Options</th>
+                                </thead>
+                                <tbody id="students-tbody"></tbody>
+                            </table>
+
+                            <div align="right">
+                                <button class="btn btn-outline-primary w-25 mx-1" data-bs-toggle="modal" data-bs-target="#add-student-modal">Add Student</button>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-scanner" role="tabpanel" aria-labelledby="v-pills-scanner-tab">
+                            <h1>Scanner</h1>
+                            <hr/>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                            <h1>Settings</h1>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+
+    <div class="modal fade" id="logout-modal" tabindex="-1" aria-labelledby="logout-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logout-modalLabel">Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Are you sure you want to logout?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="index.html" type="button" class="btn btn-primary">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add-book-modal" tabindex="-1" aria-labelledby="add-book-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add-book-modalLabel">Add New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="add-book-btn" href="index.html" type="button" class="btn btn-primary">Add Book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add-student-modal" tabindex="-1" aria-labelledby="add-student-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add-student-modalLabel">Add Student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="add-student-btn" type="button" class="btn btn-primary">Add Student</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="./scripts/global.js"></script>
+    <script src="./scripts/dashboard.js"></script>
+    <script src="./scripts/bootstrap.bundle.min.js"></script>
+    <script src="./scripts/jquery.dataTables.min.js"></script>
+</body>
+</html>
