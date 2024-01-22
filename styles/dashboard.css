@@ -1,0 +1,4 @@
+#auth-table_filter label, .show-size, .dataTables_filter {
+    display: inline-flex !important; 
+    align-items: center !important;
+}
