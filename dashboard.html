@@ -5,7 +5,6 @@
     <meta name="keywords" content="nthnn" />
     <meta name="author" content="nthnn, nathannestein" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
 
     <title>Librarium | Dashboard</title>
 
@@ -137,6 +136,12 @@
                         <div class="tab-pane fade" id="v-pills-scanner" role="tabpanel" aria-labelledby="v-pills-scanner-tab">
                             <h1>Scanner</h1>
                             <hr/>
+
+                            <select id="available-cameras" class="form-control w-100">
+                                <option disabled selected>No available cameras.</option>
+                            </select>
+
+                            <video id="preview" class="mt-2"></video>
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
