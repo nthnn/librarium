@@ -4,7 +4,7 @@ require('@electron/remote/main').initialize();
 app.on('ready', ()=> {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
     let mainWindow = new BrowserWindow({
-        width: 1150,
+        width: 1100,
         height: 700,
         autoHideMenuBar: true,
         icon: "assets/ic-librarium.ico",
