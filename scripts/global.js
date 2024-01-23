@@ -1,8 +1,10 @@
+window.jQuery = window.$ = require("jquery");
+
 const sqlite3 = require("sqlite3");
 const md5 = require("md5");
+const Instascan = require("instascan");
 
 let db = new sqlite3.Database("librarium.db");
-window.jQuery = window.$ = require("jquery");
 
 const Librarium = {
     initDataTable: (tableId, emptyMessage)=> {
@@ -61,6 +63,47 @@ const Librarium = {
                 }
 
                 error();
+            });
+        });
+    },
+
+    startScanner: (scanEvt, errorEvt)=> {
+        let args = {video: document.getElementById("preview")};
+        window.URL.createObjectURL = (stream) => {
+            args.video.srcObject = stream;
+            return stream;
+        };
+
+        let scanner = new Instascan.Scanner(args);
+        scanner.addListener("scan", (content)=> scanEvt(content));
+
+        let cameraObjs = [];
+        Instascan.Camera.getCameras().then((cameras)=> {
+            if(cameras.length > 0) {
+                cameraObjs = cameras;
+                return;
+            }
+
+            errorEvt('No cameras found.');
+        }).then(()=> {
+            let cameraList = "", idx = 0;
+            cameraObjs.forEach((cam)=> {
+                cameraList += "<option value=\"" + idx + "\">" + cam.name + "</option>"
+                idx++;
+            });
+
+            $("#available-cameras").html(cameraList);
+            $("#available-cameras option").last().attr("selected", "selected");
+
+            scanner.start(cameraObjs.at(-1));
+        }).catch((e)=> errorEvt(e));
+
+        $("#available-cameras").on("change", ()=> {
+            let selectedCamera = $("#available-cameras option:selected").val();
+
+            scanner.stop().then(()=> {
+                scanner.start(cameraObjs[parseInt(selectedCamera)]);
+                console.log(selectedCamera);
             });
         });
     }
