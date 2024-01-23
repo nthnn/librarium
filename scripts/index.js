@@ -14,9 +14,9 @@ $(document).ready(()=> {
             top: document.documentElement.scrollHeight,
             behavior: "smooth"
         });
+        localStorage.setItem("-", "true");
+    }, localStorage.getItem("-") == "true" ? 2500 : 1500);
 
-        document.body.classList.add("overflow-hidden");
-    }, 1500);
     $("#login-btn").click(()=> {
         hideLoginError();
 
