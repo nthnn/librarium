@@ -9,13 +9,13 @@ const showErrorMessage = (id, message)=> {
 };
 
 $(document).ready(()=> {
-    //$("#loading-modal").modal("show");
-    //setTimeout(()=> $("#loading-modal").modal("hide"), 2000);
+    $("#loading-modal").modal("show");
+    setTimeout(()=> $("#loading-modal").modal("hide"), 1200);
 
     Librarium.fetchAllBooks();
 
     Librarium.recentDataable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
-    //Librarium.booksTable = Librarium.initDataTable("#books-table", "No books found.");
+    Librarium.booksTable = Librarium.initDataTable("#books-table", "No books found.");
     Librarium.studentsTable = Librarium.initDataTable("#students-table", "No students found.");
 
     Librarium.startScanner(()=> {}, ()=> {});
