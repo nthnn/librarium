@@ -3,6 +3,7 @@ window.jQuery = window.$ = require("jquery");
 const sqlite3 = require("sqlite3");
 const md5 = require("md5");
 const Instascan = require("instascan");
+const Qrious = require("qrious");
 
 let db = new sqlite3.Database("librarium.db");
 
@@ -22,6 +23,17 @@ const Librarium = {
             getRandomHexDigit() + getRandomHexBlock().substring(1) + "-" +
             getRandomHexBlock() + getRandomHexBlock() + getRandomHexBlock()
         );
+    },
+
+    generateQrCode: (text, fileName)=> {
+        let dummyElem = document.createElement("a");
+        dummyElem.classList.add("d-none");
+        dummyElem.download = fileName.replace(/ /g, "_").replace(/[^\w.-]/g, "") + ".jpg";
+        dummyElem.href = new Qrious({value: text}).toDataURL("image/jpeg");
+
+        document.body.appendChild(dummyElem);
+        dummyElem.click();
+        document.body.removeChild(dummyElem);
     },
 
     initDataTable: (tableId, emptyMessage)=> {
@@ -56,13 +68,14 @@ const Librarium = {
 
     addBook: ({title, author, publisher, publicationDate, copies, error, success})=> {
         db.serialize(()=> {
+            let uuid = Librarium.generateUuid();
             db.run("INSERT INTO books (title, author, publisher, publication_date, num_copies, uuid) VALUES(\"" +
                     title + "\", \"" + author + "\", \"" +
                     publisher + "\", \"" + publicationDate + "\", " +
-                    copies + ", \"" + generateUuid() + "\")",
+                    copies + ", \"" + uuid + "\")",
                 (res, err)=> {
                 if(err == null) {
-                    success();
+                    success(uuid);
                     return;
                 }
 

@@ -205,11 +205,25 @@
 
                     <label for="book-copies" class="form-label mt-2">Number of Copies</label>
                     <input type="number" class="form-control" id="book-copies" placeholder="Number of Book Copies" />
+
+                    <p id="book-error" class="text-primary d-none mt-2 mb-0 pb-0"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button id="add-book-btn" href="index.html" type="button" class="btn btn-primary">Add Book</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="book-added-modal" tabindex="-1" aria-labelledby="book-added-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="book-added-modalLabel">Successfully Added</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Book was sucessfully added to database!</div>
             </div>
         </div>
     </div>
