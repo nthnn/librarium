@@ -7,6 +7,23 @@ const Instascan = require("instascan");
 let db = new sqlite3.Database("librarium.db");
 
 const Librarium = {
+    generateUuid: ()=> {
+        const getRandomHexDigit = ()=> Math.floor(Math.random() * 16).toString(16),
+            getRandomHexBlock = ()=> (
+                getRandomHexDigit() +
+                getRandomHexDigit() +
+                getRandomHexDigit() +
+                getRandomHexDigit()
+            );
+
+        return (
+            getRandomHexBlock() + getRandomHexBlock() + "-" +
+            getRandomHexBlock() + "-4" +
+            getRandomHexDigit() + getRandomHexBlock().substring(1) + "-" +
+            getRandomHexBlock() + getRandomHexBlock() + getRandomHexBlock()
+        );
+    },
+
     initDataTable: (tableId, emptyMessage)=> {
         return $(tableId).dataTable({
             "language": {
@@ -39,10 +56,10 @@ const Librarium = {
 
     addBook: ({title, author, publisher, publicationDate, copies, error, success})=> {
         db.serialize(()=> {
-            db.run("INSERT INTO books (title, author, publisher, publication_date, num_copies) VALUES(\"" +
+            db.run("INSERT INTO books (title, author, publisher, publication_date, num_copies, uuid) VALUES(\"" +
                     title + "\", \"" + author + "\", \"" +
                     publisher + "\", \"" + publicationDate + "\", " +
-                    copies + ")",
+                    copies + ", \"" + generateUuid() + "\")",
                 (res, err)=> {
                 if(err == null) {
                     success();
@@ -54,9 +71,9 @@ const Librarium = {
         });
     },
 
-    deleteBook: (title, error, success)=> {
+    deleteBook: (uuid, error, success)=> {
         db.serialize(()=> {
-            db.run("DELETE FROM books WHERE title=\"" + title + "\"", (res, err)=> {
+            db.run("DELETE FROM books WHERE uuid=\"" + uuid + "\"", (res, err)=> {
                 if(err == null) {
                     success();
                     return;
