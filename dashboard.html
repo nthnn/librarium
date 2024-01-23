@@ -143,12 +143,79 @@
                                 <option disabled selected>No available cameras.</option>
                             </select>
 
-                            <video id="preview" class="mt-2"></video>
+                            <center>
+                                <video id="preview" class="mt-2 rounded"></video>
+                            </center>
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                             <h1>Settings</h1>
                             <hr/>
+
+                            <b class="mt-4">Change Username</b>
+                            <br/>
+
+                            <div class="row mt-4">
+                                <div class="col-3">
+                                    <label for="new-username" class="form-label mt-2">New Username</label>
+                                </div>
+
+                                <div class="col-9">
+                                    <input type="text" class="form-control" id="new-username" placeholder="New Username" />        
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-3">
+                                    <label for="change-un-password" class="form-label mt-2">Password</label>
+                                </div>
+
+                                <div class="col-9">
+                                    <input type="password" class="form-control" id="change-un-password" placeholder="Password" />        
+                                </div>
+                            </div>
+
+                            <div align="right" class="mt-4">
+                                <button type="button" id="change-username-btn" class="btn btn-outline-primary">Save Changes</button>
+                            </div>
+                            <hr/>
+
+                            <b class="mt-4">Change Password</b>
+                            <br/>
+
+                            <div class="row mt-2">
+                                <div class="col-3">
+                                    <label for="old-password" class="form-label mt-2">Old Password</label>
+                                </div>
+
+                                <div class="col-9">
+                                    <input type="password" class="form-control" id="old-password" placeholder="Old Password" />        
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-3">
+                                    <label for="new-password" class="form-label mt-2">New Password</label>
+                                </div>
+
+                                <div class="col-9">
+                                    <input type="password" class="form-control" id="new-password" placeholder="New Password" />        
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-3">
+                                    <label for="confirm-password" class="form-label mt-2">Confirm Password</label>
+                                </div>
+
+                                <div class="col-9">
+                                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirm New Password" />        
+                                </div>
+                            </div>
+
+                            <div align="right" class="mt-4">
+                                <button type="button" id="change-password-btn" class="btn btn-outline-primary">Change Password</button>
+                            </div>
                         </div>
                     </div>
                 </div>
