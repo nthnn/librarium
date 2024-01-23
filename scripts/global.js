@@ -26,9 +26,42 @@ const Librarium = {
                     successEvent();
                     return;
                 }
-
                 errEvent();
             })
         });
+    },
+
+    validateBookTitle: (title)=> title.length > 1 && title.length < 100,
+    validateBookAuthor: (author)=> /^[A-Za-z\s.'-]+$/.test(author),
+    validateBookPublisher: (publisher)=> /^[a-zA-Z0-9\s]+$/.test(publisher),
+
+    addBook: ({title, author, publisher, publicationDate, copies, error, success})=> {
+        db.serialize(()=> {
+            db.run("INSERT INTO books (title, author, publisher, publication_date, num_copies) VALUES(\"" +
+                    title + "\", \"" + author + "\", \"" +
+                    publisher + "\", \"" + publicationDate + "\", " +
+                    copies + ")",
+                (res, err)=> {
+                if(err == null) {
+                    success();
+                    return;
+                }
+
+                error();
+            });
+        });
+    },
+
+    deleteBook: (title, error, success)=> {
+        db.serialize(()=> {
+            db.run("DELETE FROM books WHERE title=\"" + title + "\"", (res, err)=> {
+                if(err == null) {
+                    success();
+                    return;
+                }
+
+                error();
+            });
+        });
     }
-}
+};
