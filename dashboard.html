@@ -155,6 +155,18 @@
     </div>
     <br/><br/>
 
+    <div class="modal fade" id="loading-modal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="loading-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" align="center">
+                    <img src="assets/loading.gif" />
+                    <br/>
+                    <p class="mt-4">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="logout-modal" tabindex="-1" aria-labelledby="logout-modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -179,6 +191,20 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <label for="book-title" class="form-label">Book Title</label>
+                    <input type="text" class="form-control" id="book-title" placeholder="Book Title" />
+
+                    <label for="book-author" class="form-label mt-2">Author</label>
+                    <input type="text" class="form-control" id="book-author" placeholder="Book Author" />
+
+                    <label for="book-publisher" class="form-label mt-2">Publisher</label>
+                    <input type="text" class="form-control" id="book-publisher" placeholder="Book Publisher" />
+
+                    <label for="book-publication-date" class="form-label mt-2">Publication Date</label>
+                    <input type="date" class="form-control" id="book-publication-date" placeholder="Book Publication Date" />
+
+                    <label for="book-copies" class="form-label mt-2">Number of Copies</label>
+                    <input type="number" class="form-control" id="book-copies" placeholder="Number of Book Copies" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
