@@ -14,8 +14,8 @@ $(document).ready(()=> {
             top: document.documentElement.scrollHeight,
             behavior: "smooth"
         });
-        localStorage.setItem("-", "true");
-    }, localStorage.getItem("-") == "true" ? 2500 : 1500);
+        sessionStorage.setItem("-", "true");
+    }, sessionStorage.getItem("-") == "true" ? 2500 : 1500);
 
     $("#login-btn").click(()=> {
         hideLoginError();

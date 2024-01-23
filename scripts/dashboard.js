@@ -13,6 +13,7 @@ $(document).ready(()=> {
     setTimeout(()=> $("#loading-modal").modal("hide"), 1200);
 
     Librarium.fetchAllBooks();
+    Librarium.fetchAllStudents();
 
     Librarium.recentDataable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
     Librarium.booksTable = Librarium.initDataTable("#books-table", "No books found.");
@@ -27,19 +28,19 @@ $(document).ready(()=> {
             publicationDate = $("#book-publication-date").val(),
             copies = parseInt($("#book-copies").val());
 
-        hideErrorMessage("id");
+        hideErrorMessage("book");
         if(title == "" || !Librarium.validateBookTitle(title)) {
-            showErrorMessage("id", "Invalid book title string.");
+            showErrorMessage("book", "Invalid book title string.");
             return;
         }
 
         if(author == "" || !Librarium.validateBookAuthor(author)) {
-            showErrorMessage("id", "Invalid book author string.");
+            showErrorMessage("book", "Invalid book author string.");
             return;
         }
 
         if(publisher == "" || !Librarium.validateBookPublisher(publisher)) {
-            showErrorMessage("id", "Invalid book publisher string.");
+            showErrorMessage("book", "Invalid book publisher string.");
             return;
         }
 
@@ -62,6 +63,40 @@ $(document).ready(()=> {
 
                 Librarium.generateQrCode(uuid, title);
                 Librarium.fetchAllBooks();
+            }
+        });
+    });
+
+    $("#add-student-btn").click(()=> {
+        let studentNumber = $("#student-number").val(),
+            name = $("#student-name").val(),
+            department = $("#student-department option:selected").val();
+
+        hideErrorMessage("student");
+        if(studentNumber == "" || !Librarium.validateStudentNumber(studentNumber)) {
+            showErrorMessage("student", "Invalid student number string.");
+            return;
+        }
+
+        if(name == "" || !Librarium.validateStudentName(name)) {
+            showErrorMessage("student", "Invalid student name string.");
+            return;
+        }
+
+        Librarium.addStudent({
+            studentNumber: studentNumber,
+            name: name,
+            department: department,
+            error: ()=> showErrorMessage("student", "Something went wrong."),
+            success: (uuid)=> {
+                $("#add-student-modal").modal("hide");
+                $("#student-added-modal").modal("show");
+
+                $("#student-number").val("");
+                $("#student-name").val("");
+
+                Librarium.generateQrCode(uuid, name);
+                Librarium.fetchAllStudents();
             }
         });
     });
