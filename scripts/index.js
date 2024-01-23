@@ -9,6 +9,14 @@ const showLoginError = (message)=> {
 };
 
 $(document).ready(()=> {
+    setTimeout(()=> {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth"
+        });
+
+        document.body.classList.add("overflow-hidden");
+    }, 1500);
     $("#login-btn").click(()=> {
         hideLoginError();
 
