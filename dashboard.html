@@ -28,7 +28,7 @@
                             <button class="nav-link w-100 py-2" id="v-pills-students-tab" data-bs-toggle="pill" data-bs-target="#v-pills-students" type="button" role="tab" aria-controls="v-pills-students" aria-selected="false">Students</button>
                             <button class="nav-link w-100 py-2" id="v-pills-scanner-tab" data-bs-toggle="pill" data-bs-target="#v-pills-scanner" type="button" role="tab" aria-controls="v-pills-scanner" aria-selected="false">Scanner</button>
                             <hr/>
-                
+
                             <button class="nav-link w-100 py-2" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
                         </div>
                     </div>
@@ -175,6 +175,9 @@
                                 </div>
                             </div>
 
+                            <p id="change-username-error" class="text-primary d-none mt-2 mb-0 pb-0"></p>
+                            <p id="changed-username-error" class="text-info d-none mt-2 mb-0 pb-0"></p>
+
                             <div align="right" class="mt-4">
                                 <button type="button" id="change-username-btn" class="btn btn-outline-primary">Save Changes</button>
                             </div>
@@ -212,6 +215,9 @@
                                     <input type="password" class="form-control" id="confirm-password" placeholder="Confirm New Password" />        
                                 </div>
                             </div>
+
+                            <p id="change-password-error" class="text-primary d-none mt-2 mb-0 pb-0"></p>
+                            <p id="changed-password-error" class="text-info d-none mt-2 mb-0 pb-0"></p>
 
                             <div align="right" class="mt-4">
                                 <button type="button" id="change-password-btn" class="btn btn-outline-primary">Change Password</button>
