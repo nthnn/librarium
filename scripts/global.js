@@ -351,5 +351,9 @@ const Librarium = {
 
         port.on('data', onDataReceive);
         return port;
+    },
+
+    showNotification: (message)=> {
+        new Notification("Transaction Detected", {body: message}).show();
     }
 };

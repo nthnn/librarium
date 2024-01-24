@@ -40,8 +40,9 @@ $(document).ready(()=> {
                 setTimeout(()=> Librarium.studentUuid = null, 5000);
             }
 
-            if(Librarium.bookUuid != null && Librarium.studentUuid != null)
-                alert("Book: " + Librarium.bookUuid + "\nStudent: " + Librarium.studentUuid);
+            if(Librarium.bookUuid != null && Librarium.studentUuid != null) {
+                // TODO: Validation event for book and student UUID
+            }
             recentScanned = null;
         });
     });
