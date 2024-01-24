@@ -237,6 +237,74 @@ const Librarium = {
         });
     },
 
+    getBookTitle: (uuid)=> {
+        return new Promise((resolve, reject) => {
+            db.serialize(() => {
+                db.all("SELECT title FROM books WHERE uuid=\"" + uuid + "\"", (err, rows) => {
+                    if(!err && rows.length === 1)
+                        resolve(rows[0].title);
+                        else resolve("");
+                });
+            });
+        });
+    },
+
+    getStudentName: (uuid)=> {
+        return new Promise((resolve, reject) => {
+            db.serialize(() => {
+                db.all("SELECT name FROM students WHERE uuid=\"" + uuid + "\"", (err, rows) => {
+                    if(!err && rows.length === 1)
+                        resolve(rows[0].title);
+                    else resolve("");
+                });
+            });
+        });
+    },
+
+    validateUuid: (uuid)=> /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{5}-[0-9a-fA-F]{12}$/.test(uuid),
+
+    processTransaction: async (bookUuid, studentUuid, successEvt, errEvt)=> {
+        if(!Librarium.validateUuid(bookUuid) || (await Librarium.getBookTitle(studentUuid)) == "") {
+            errEvt("Invalid book UUID string.");
+            return;
+        }
+
+        if(!Librarium.validateUuid(studentUuid) || (await Librarium.getStudentName(studentUuid)) == "") {
+            errEvt("Invalid student UUID string.");
+            return;
+        }
+
+        db.serialize(()=> {
+            db.all("SELECT * FROM records WHERE date_returned=\"-\" AND book_uuid=\"" + bookUuid + "\" AND student_uuid=\"" + studentUuid + "\"", async (err, rows)=> {
+                if(err)
+                    errEvt("Something went wrong.");
+                else if(rows.length == 1)
+                    db.all("UPDATE records SET date_returned=\"" + Librarium.currentDateTimeString() +
+                        "\" WHERE book_uuid=\"" + bookUuid +
+                        "\" AND student_uuid=\"" + studentUuid + "\"", (_err, _)=> {
+                        if(_err) {
+                            errEvt("Something went wrong.");
+                            return;
+                        }
+
+                        successEvt(true);
+                    });
+                else {
+                    db.all("INSERT INTO records (book_uuid, date_borrowed, date_returned, student_uuid) VALUES(\"" + bookUuid +
+                        "\", \"" + Librarium.currentDateTimeString() +
+                        "\", \"-\", \"" + studentUuid + "\")", (_err, _)=> {
+                        if(_err) {
+                            errEvt("Something went wrong.");
+                            return;
+                        }
+
+                        successEvt(false);
+                    });
+                }
+            });
+        });
+    },
+
     startScanner: (scanEvt, errorEvt)=> {
         let args = {video: document.getElementById("preview")};
         window.URL.createObjectURL = (stream) => {
@@ -353,7 +421,24 @@ const Librarium = {
         return port;
     },
 
-    showNotification: (message)=> {
-        new Notification("Transaction Detected", {body: message}).show();
-    }
+    showNotification: (message)=> new Notification("Transaction Detected", {body: message}),
+
+    currentDateTimeString: ()=> {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = currentDate.getDate().toString().padStart(2, '0');
+        const hours = currentDate.getHours().toString().padStart(2, '0');
+        const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+        const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+      
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    },
+
+    parseDateTimeString: (dateTimeString)=> {
+        const [year, month, day, hours, minutes, seconds] = dateTimeString.split(/[\s:-]/).map(Number);
+        return new Date(year, month - 1, day, hours, minutes, seconds);
+    },
+
+    isPast24Hours: (date)=> ((new Date().getTime()) - date.getTime()) > 86400000
 };

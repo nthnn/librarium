@@ -35,13 +35,23 @@ $(document).ready(()=> {
             }
             else if(Librarium.bookUuid != null && Librarium.studentUuid == null && recentScanned != null) {
                 Librarium.studentUuid = recentScanned;
-                device.write("2");
-
                 setTimeout(()=> Librarium.studentUuid = null, 5000);
             }
 
             if(Librarium.bookUuid != null && Librarium.studentUuid != null) {
-                // TODO: Validation event for book and student UUID
+                let bookUuid = Librarium.bookUuid,
+                    studentUuid = Librarium.studentUuid;
+
+                Librarium.processTransaction(
+                    bookUuid, studentUuid,
+                    async (isReturned)=> {
+                        Librarium.showNotification("Transaction success for book: " +
+                            (await Librarium.getBookTitle(bookUuid)) + " [" +
+                            (isReturned ? "Returned" : "Borrowed") + "]");
+                        device.write("2");
+                    },
+                    (errorMsg)=> Librarium.showNotification(errorMsg)
+                );
             }
             recentScanned = null;
         });
