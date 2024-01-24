@@ -19,7 +19,32 @@ $(document).ready(()=> {
     Librarium.booksTable = Librarium.initDataTable("#books-table", "No books found.");
     Librarium.studentsTable = Librarium.initDataTable("#students-table", "No students found.");
 
-    Librarium.startScanner(()=> {}, ()=> {});
+    let recentScanned = null;
+    Librarium.startScanner(
+        (scanned)=> recentScanned = scanned,
+        (_)=> {}
+    );
+
+    Librarium.listSerialPort((ports)=> {
+        let device = Librarium.openSerialPort(ports.at(-1), (data)=> {
+            if(Librarium.bookUuid == null && recentScanned != null) {
+                Librarium.bookUuid = recentScanned;
+                device.write("1");
+
+                setTimeout(()=> Librarium.bookUuid = null, 5000);
+            }
+            else if(Librarium.bookUuid != null && Librarium.studentUuid == null && recentScanned != null) {
+                Librarium.studentUuid = recentScanned;
+                device.write("2");
+
+                setTimeout(()=> Librarium.studentUuid = null, 5000);
+            }
+
+            if(Librarium.bookUuid != null && Librarium.studentUuid != null)
+                alert("Book: " + Librarium.bookUuid + "\nStudent: " + Librarium.studentUuid);
+            recentScanned = null;
+        });
+    });
 
     $("#add-book-btn").click(()=> {
         let title = $("#book-title").val(),

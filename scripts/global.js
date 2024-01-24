@@ -4,6 +4,9 @@ const sqlite3 = require("sqlite3");
 const md5 = require("md5");
 const Instascan = require("instascan");
 const Qrious = require("qrious");
+const SPort = require("serialport");
+const SerialPort = SPort.SerialPort;
+const ReadlineParser = SPort.ReadlineParser;
 
 let db = new sqlite3.Database("librarium.db");
 let tobeDeletedBook = null,
@@ -13,6 +16,9 @@ const Librarium = {
     recentDataTable: null,
     booksTable: null,
     studentsTable: null,
+
+    bookUuid: null,
+    studentUuid: null,
 
     generateUuid: ()=> {
         const getRandomHexDigit = ()=> Math.floor(Math.random() * 16).toString(16),
@@ -35,7 +41,13 @@ const Librarium = {
         let dummyElem = document.createElement("a");
         dummyElem.classList.add("d-none");
         dummyElem.download = fileName.replace(/ /g, "_").replace(/[^\w.-]/g, "") + ".jpg";
-        dummyElem.href = new Qrious({value: text}).toDataURL("image/jpeg");
+        dummyElem.href = new Qrious({
+            background: "black",
+            foreground: "white",
+            padding: 30,
+            size: 512,
+            value: text
+        }).toDataURL("image/jpeg");
 
         document.body.appendChild(dummyElem);
         dummyElem.click();
@@ -258,7 +270,6 @@ const Librarium = {
 
         $("#available-cameras").on("change", ()=> {
             let selectedCamera = $("#available-cameras option:selected").val();
-
             scanner.stop().then(()=> scanner.start(cameraObjs[parseInt(selectedCamera)]));
         });
     },
@@ -320,5 +331,25 @@ const Librarium = {
                 errEvent("Something went wrong.");
             });
         });
+    },
+
+    listSerialPort: (evt)=> {
+        SerialPort.list().then((data)=> {
+            let ports = [];
+            for(let port of data)
+                ports.push(port.path);
+
+            evt(ports);
+        });
+    },
+
+    openSerialPort: (path, onDataReceive)=> {
+        let port = new SerialPort({
+            path: path,
+            baudRate: 9600
+        });
+
+        port.on('data', onDataReceive);
+        return port;
     }
 };
