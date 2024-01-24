@@ -277,8 +277,8 @@ const Librarium = {
         }
 
         db.serialize(()=> {
-            db.run("UPDATE admin SET username=\"" + username + "\"", (err, rows)=> {
-                if(!err && rows.length == 1) {
+            db.all("UPDATE admin SET username=\"" + username + "\"", (err, _)=> {
+                if(!err) {
                     successEvent();
                     return;
                 }
@@ -304,15 +304,15 @@ const Librarium = {
             return;
         }
 
-        if(newPassword == confirmPassword) {
+        if(newPassword != confirmPassword) {
             errEvent("New password and confirmation password did not match.");
             return;
         }
 
         db.serialize(()=> {
-            db.run("UPDATE admin SET password=\"" + md5(newPassword) + "\" WHERE password=\"" + md5(oldPassword) + "\"",
-                (err, rows)=> {
-                if(!err && rows.length == 1) {
+            db.all("UPDATE admin SET password=\"" + md5(newPassword) + "\" WHERE password=\"" + md5(oldPassword) + "\"",
+                (err, _)=> {
+                if(!err) {
                     successEvent();
                     return;
                 }

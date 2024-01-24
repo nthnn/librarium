@@ -100,4 +100,28 @@ $(document).ready(()=> {
             }
         });
     });
+
+    $("#change-username-btn").click(()=> {
+        hideErrorMessage("change-username");
+        hideErrorMessage("changed-username");
+
+        Librarium.changeUsername(
+            $("#new-username").val(),
+            $("#change-un-password").val(),
+            (err)=> showErrorMessage("change-username", err),
+            ()=> showErrorMessage("changed-username", "Username was successfully changed."));
+    });
+
+    $("#change-password-btn").click(()=> {
+        hideErrorMessage("change-password");
+        hideErrorMessage("changed-password");
+
+        Librarium.changePassword(
+            $("#old-password").val(),
+            $("#new-password").val(),
+            $("#confirm-password").val(),
+            (err)=> showErrorMessage("change-password", err),
+            ()=> showErrorMessage("changed-password", "Password was successfully changed.")
+        );
+    });
 });
