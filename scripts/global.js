@@ -42,8 +42,8 @@ const Librarium = {
         dummyElem.classList.add("d-none");
         dummyElem.download = fileName.replace(/ /g, "_").replace(/[^\w.-]/g, "") + ".jpg";
         dummyElem.href = new Qrious({
-            background: "black",
-            foreground: "white",
+            background: "white",
+            foreground: "black",
             padding: 30,
             size: 512,
             value: text
