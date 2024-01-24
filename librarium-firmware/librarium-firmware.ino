@@ -1,6 +1,10 @@
 #define BUZZER 9
 #define LED_LEVEL_1 2
 #define LED_LEVEL_2 3
+
+#define LED_SUCCESS 4
+#define LED_FAILED 5
+
 #define SENSOR_ECHO 6
 #define SENSOR_TRIGGER 7
 
