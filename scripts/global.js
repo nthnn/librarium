@@ -261,5 +261,64 @@ const Librarium = {
 
             scanner.stop().then(()=> scanner.start(cameraObjs[parseInt(selectedCamera)]));
         });
+    },
+
+    validatePassword: (password)=> password.length > 4,
+
+    changeUsername: (username, password, errEvent, successEvent)=> {
+        if(!Librarium.validateUsername(username)) {
+            errEvent("Invalid new username string.");
+            return;
+        }
+
+        if(!Librarium.validatePassword(password)) {
+            errEvent("Invalid password string.");
+            return;
+        }
+
+        db.serialize(()=> {
+            db.run("UPDATE admin SET username=\"" + username + "\"", (err, rows)=> {
+                if(!err && rows.length == 1) {
+                    successEvent();
+                    return;
+                }
+
+                errEvent("Something went wrong.");
+            });
+        });
+    },
+
+    changePassword: (oldPassword, newPassword, confirmPassword, errEvent, successEvent)=> {
+        if(!Librarium.validatePassword(oldPassword)) {
+            errEvent("Invalid old password string.");
+            return;
+        }
+
+        if(!Librarium.validatePassword(newPassword)) {
+            errEvent("Invalid new password string.");
+            return;
+        }
+
+        if(!Librarium.validatePassword(confirmPassword)) {
+            errEvent("Invalid confirmation password string.");
+            return;
+        }
+
+        if(newPassword == confirmPassword) {
+            errEvent("New password and confirmation password did not match.");
+            return;
+        }
+
+        db.serialize(()=> {
+            db.run("UPDATE admin SET password=\"" + md5(newPassword) + "\" WHERE password=\"" + md5(oldPassword) + "\"",
+                (err, rows)=> {
+                if(!err && rows.length == 1) {
+                    successEvent();
+                    return;
+                }
+
+                errEvent("Something went wrong.");
+            });
+        });
     }
 };
