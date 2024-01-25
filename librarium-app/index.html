@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Librarium | Login</title>
+
+    <link href="./styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="./styles/animate.min.css" rel="stylesheet" />
+    <link href="./assets/ic-librarium.ico" rel="shortcut icon" />
+</head>
+<body class="overflow-hidden">
+    <div style="height: 100vh">
+        <div class="container h-100 d-flex justify-content-center align-items-center">
+            <center>
+                <img src="./assets/loading.gif" />
+                <br/>
+
+                <p class="mt-2">Loading...</p>
+            </center>
+        </div>
+    </div> 
+
+    <div class="bg-primary row">
+        <div class="col-4 bg-white" style="height: 100vh">
+            <div class="container h-100 d-flex justify-content-center align-items-center">
+                <img class="animate__animated animate__delay-3s animate__slideInLeft" src="assets/librarium-logo.png" width="290px" />
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="container h-100 d-flex justify-content-center align-items-center">
+                <div class="card border col-9 animate__animated animate__delay-3s animate__slideInRight">
+                    <div class="card-header" align="center">
+                        <div class="mt-3"></div>
+                        <h1 class="card-title">Librarium Log-in</h1>
+                        <div class="mt-3"></div>
+                    </div>
+                    <div class="card-body" align="left">
+                        <label for="username" class="form-label mt-2">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="Username" />
+
+                        <label for="password" class="form-label mt-2">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" />
+
+                        <p id="login-error" class="text-primary d-none mt-2 mb-0 pb-0"></p>
+                    </div>
+                    <div class="card-footer py-3" align="right">
+                        <button id="login-btn" class="btn btn-outline-primary px-4">Log-in</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="./scripts/global.js"></script>
+    <script src="./scripts/index.js"></script>
+</body>
+</html>
