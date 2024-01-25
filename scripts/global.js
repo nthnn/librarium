@@ -238,7 +238,7 @@ const Librarium = {
     },
 
     getBookTitle: (uuid)=> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _) => {
             db.serialize(() => {
                 db.all("SELECT title FROM books WHERE uuid=\"" + uuid + "\"", (err, rows) => {
                     if(!err && rows.length === 1)
@@ -250,7 +250,7 @@ const Librarium = {
     },
 
     getStudentName: (uuid)=> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _) => {
             db.serialize(() => {
                 db.all("SELECT name FROM students WHERE uuid=\"" + uuid + "\"", (err, rows) => {
                     if(!err && rows.length === 1)
@@ -337,6 +337,44 @@ const Librarium = {
                 }
 
                 Librarium.recentDataTable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
+            });
+        });
+
+        Librarium.fetchAllDashboardInfo();
+    },
+
+    fetchAllDashboardInfo: ()=> {
+        db.serialize(()=> {
+            db.all(
+                "SELECT * FROM records",
+                (_, rows)=> $("#total-borrowed").html(rows.length)
+            );
+
+            db.all("SELECT date_borrowed, date_returned FROM records WHERE date_returned <> \"-\"", (err, rows)=> {
+                if(!err && rows.length > 0) {
+                    $("#total-returned").html(rows.length);
+
+                    rows.forEach((row)=> {
+                        if(Librarium.isPast24Hours(
+                            Librarium.parseDateTimeString(row.date_borrowed),
+                            Librarium.parseDateTimeString(row.date_returned)
+                        )) {
+                            let currentValue = parseInt($("#overdue-books").html());
+                            $("#overdue-books").html(currentValue + 1);
+                        }
+                    });
+                }
+            });
+
+            db.all("SELECT num_copies FROM books", (err, rows)=> {
+                if(!err && rows.length > 0) {
+                    $("#num-of-stocks").html("0");
+
+                    rows.forEach((row)=> {
+                        let currentValue = parseInt($("#num-of-stocks").html());
+                        $("#num-of-stocks").html(currentValue + row.num_copies);
+                    });
+                }
             });
         });
     },
@@ -479,5 +517,5 @@ const Librarium = {
         return new Date(year, month - 1, day, hours, minutes, seconds);
     },
 
-    isPast24Hours: (date)=> ((new Date().getTime()) - date.getTime()) > 86400000
+    isPast24Hours: (date, baseDate)=> (baseDate - date.getTime()) > 86400000
 };

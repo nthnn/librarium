@@ -46,6 +46,9 @@ $(document).ready(()=> {
                 Librarium.processTransaction(
                     bookUuid, studentUuid,
                     async (isReturned)=> {
+                        Librarium.bookUuid = null;
+                        Librarium.studentUuid = null
+
                         Librarium.showNotification("Transaction success for book: " +
                             (await Librarium.getBookTitle(bookUuid)) + " [" +
                             (isReturned ? "Returned" : "Borrowed") + "]");
