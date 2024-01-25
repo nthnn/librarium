@@ -15,7 +15,8 @@ void switchLed(uint8_t level);
 uint8_t detectObject();
 
 unsigned long currentMillis = 0UL;
-bool watchOut = false;
+bool watchOut = false,
+  shouldDelay = false;
 
 void setup() {
   pinMode(LED_LEVEL_1_PIN,    OUTPUT);
@@ -34,6 +35,11 @@ void loop() {
 
     watchOut = false;
     currentMillis = 0UL;
+
+    if(shouldDelay) {
+      delay(3000);
+      shouldDelay = false;
+    }
   }
 
   while(Serial.available()) {
@@ -106,8 +112,10 @@ void switchLed(uint8_t level) {
       break;
   }
 
-  if(level == 2)
+  if(level == 2) {
     doubleBuzz();
+    shouldDelay = true;
+  }
   else if(level == 1)
     singleBuzz();
 }
