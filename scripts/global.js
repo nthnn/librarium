@@ -308,12 +308,12 @@ const Librarium = {
     fetchAllRecords: ()=> {
         db.serialize(()=> {
             db.all("SELECT book_uuid, date_borrowed, date_returned, student_uuid FROM records", (err, rows)=> {
-                if(!err && rows.length >= 1) {
-                    if(Librarium.recentDataTable != null) {
-                        Librarium.recentDataTable.destroy();
-                        $("#recent-data-tbody").empty();
-                    }
+                if(Librarium.recentDataTable != null) {
+                    Librarium.recentDataTable.destroy();
+                    $("#recent-data-tbody").empty();
+                }
 
+                if(!err && rows.length >= 1) {
                     const tasks = rows.map(async (row)=> {
                         let due = Librarium.parseDateTimeString(row.date_borrowed);
                         due.setHours(due.getHours() + 24);
@@ -330,11 +330,12 @@ const Librarium = {
                     });
 
                     Promise.all(tasks).then(()=> {
-                        Librarium.recentDataTable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
                         $("#recent-data-tbody td.dataTables_empty")
                             .addClass("d-none");
                     });
                 }
+
+                Librarium.recentDataTable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
             });
         });
 
@@ -515,5 +516,15 @@ const Librarium = {
         return new Date(year, month - 1, day, hours, minutes, seconds);
     },
 
-    isPast24Hours: (date, baseDate)=> (baseDate - date.getTime()) > 86400000
+    isPast24Hours: (date, baseDate)=> (baseDate - date.getTime()) > 86400000,
+
+    clearAllRecords: ()=> {
+        db.serialize(()=> {
+            db.all("DELETE FROM records", (err, _)=> {
+                Librarium.fetchAllRecords();
+                $("#clear-all-modal").modal("hide");
+                $("#clear-success-modal").modal("show");
+            });
+        });
+    }
 };

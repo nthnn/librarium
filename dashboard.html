@@ -91,6 +91,16 @@
                                 </thead>
                                 <tbody id="recent-data-tbody"></tbody>
                             </table>
+
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-primary w-100">Manual Recording</button>
+                                </div>
+
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#clear-all-modal">Clear Records</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="tab-pane fade" id="v-pills-books" role="tabpanel" aria-labelledby="v-pills-books-tab">
@@ -238,6 +248,34 @@
                     <br/>
                     <p class="mt-4">Loading...</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="clear-all-modal" tabindex="-1" aria-labelledby="clear-all-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clear-all-modalLabel">Clear All</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Are you sure you want to clear all records?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="Librarium.clearAllRecords()">Clear</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="clear-success-modal" tabindex="-1" aria-labelledby="clear-success-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clear-success-modalLabel">Successfully Cleared</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Records has been successfully removed from the database!</div>
             </div>
         </div>
     </div>
