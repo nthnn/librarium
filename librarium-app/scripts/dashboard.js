@@ -10,7 +10,7 @@ const showErrorMessage = (id, message)=> {
 
 $(document).ready(()=> {
     $("#loading-modal").modal("show");
-    setTimeout(()=> $("#loading-modal").modal("hide"), 1200);
+    setTimeout(()=> $("#loading-modal").modal("hide"), 2500);
 
     Librarium.fetchAllRecords();
     Librarium.fetchAllBooks();
