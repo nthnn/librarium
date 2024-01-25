@@ -243,7 +243,7 @@ const Librarium = {
                 db.all("SELECT title FROM books WHERE uuid=\"" + uuid + "\"", (err, rows) => {
                     if(!err && rows.length === 1)
                         resolve(rows[0].title);
-                        else resolve("");
+                    else resolve("");
                 });
             });
         });
@@ -254,7 +254,7 @@ const Librarium = {
             db.serialize(() => {
                 db.all("SELECT name FROM students WHERE uuid=\"" + uuid + "\"", (err, rows) => {
                     if(!err && rows.length === 1)
-                        resolve(rows[0].title);
+                        resolve(rows[0].name);
                     else resolve("");
                 });
             });
@@ -264,7 +264,7 @@ const Librarium = {
     validateUuid: (uuid)=> /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{5}-[0-9a-fA-F]{12}$/.test(uuid),
 
     processTransaction: async (bookUuid, studentUuid, successEvt, errEvt)=> {
-        if(!Librarium.validateUuid(bookUuid) || (await Librarium.getBookTitle(studentUuid)) == "") {
+        if(!Librarium.validateUuid(bookUuid) || (await Librarium.getBookTitle(bookUuid)) == "") {
             errEvt("Invalid book UUID string.");
             return;
         }
@@ -301,6 +301,43 @@ const Librarium = {
                         successEvt(false);
                     });
                 }
+            });
+        });
+    },
+
+    fetchAllRecords: ()=> {
+        db.serialize(()=> {
+            db.all("SELECT book_uuid, date_borrowed, date_returned, student_uuid FROM records", (err, rows)=> {
+                if(Librarium.recentDataTable != null) {
+                    Librarium.recentDataTable.destroy();
+                    $("#recent-data-tbody").empty();
+                }
+
+                if(!err && rows.length >= 1) {
+                    let hasHidden = false;
+                    rows.forEach(async (row)=> {
+                        let due = Librarium.parseDateTimeString(row.date_borrowed);
+                        due.setHours(due.getHours() + 24);
+
+                        let recentDataRow = "";
+                        recentDataRow += "<tr><td>" + (await Librarium.getBookTitle(row.book_uuid)) +
+                            "</td><td>" + row.date_borrowed +
+                            "</td><td>" + Librarium.convertDateTimeToString(due) +
+                            "</td><td>" + row.date_returned +
+                            "</td><td>" + (await Librarium.getStudentName(row.student_uuid)) +
+                            "</td></tr>";
+
+                        $("#recent-data-tbody").append(recentDataRow);
+
+                        if(!hasHidden) {
+                            $("#recent-data-tbody td.dataTables_empty")
+                                .addClass("d-none");
+                            hasHidden = true;
+                        }
+                    });
+                }
+
+                Librarium.recentDataTable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
             });
         });
     },
@@ -423,16 +460,19 @@ const Librarium = {
 
     showNotification: (message)=> new Notification("Transaction Detected", {body: message}),
 
-    currentDateTimeString: ()=> {
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-        const day = currentDate.getDate().toString().padStart(2, '0');
-        const hours = currentDate.getHours().toString().padStart(2, '0');
-        const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-        const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-      
+    convertDateTimeToString: (date)=> {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    },
+
+    currentDateTimeString: ()=> {
+        return Librarium.convertDateTimeToString(new Date());
     },
 
     parseDateTimeString: (dateTimeString)=> {

@@ -12,10 +12,11 @@ $(document).ready(()=> {
     $("#loading-modal").modal("show");
     setTimeout(()=> $("#loading-modal").modal("hide"), 1200);
 
+    Librarium.fetchAllRecords();
     Librarium.fetchAllBooks();
     Librarium.fetchAllStudents();
 
-    Librarium.recentDataable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
+    Librarium.recentDataTable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
     Librarium.booksTable = Librarium.initDataTable("#books-table", "No books found.");
     Librarium.studentsTable = Librarium.initDataTable("#students-table", "No students found.");
 
@@ -49,6 +50,8 @@ $(document).ready(()=> {
                             (await Librarium.getBookTitle(bookUuid)) + " [" +
                             (isReturned ? "Returned" : "Borrowed") + "]");
                         device.write("2");
+
+                        Librarium.fetchAllRecords();
                     },
                     (errorMsg)=> Librarium.showNotification(errorMsg)
                 );
