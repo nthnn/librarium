@@ -21,9 +21,13 @@ app.on('ready', ()=> {
         },
     });
 
-    //globalShortcut.register("Control+Shift+I", () => { return false; });
-    //globalShortcut.register("Control+R", () => { return false; });
+    globalShortcut.register("Control+Shift+I", () => { return false; });
+    globalShortcut.register("Control+R", () => { return false; });
     globalShortcut.register("Control+W", () => { return false; });
+
+    globalShortcut.register("Command+Option+I", () => { return false; });
+    globalShortcut.register("Command+R", () => { return false; });
+    globalShortcut.register("Command+W", () => { return false; });
 
     mainWindow.loadFile("index.html");
     mainWindow.on("closed", () => mainWindow = null);
