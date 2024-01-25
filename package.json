@@ -2,9 +2,10 @@
   "name": "librarium",
   "version": "1.0.0",
   "description": "Automated library system with Arduino UNO and Electron.",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "pack": "node index.js",
+    "build": "npx electron-packager ./librarium-app librarium --overwrite --platform=win32 --arch=x64 --appname Librarium"
   },
   "repository": {
     "type": "git",
@@ -16,16 +17,8 @@
     "url": "https://github.com/nthnn/librarium/issues"
   },
   "homepage": "https://github.com/nthnn/librarium#readme",
-  "devDependencies": {
-    "electron": "^28.1.4"
-  },
   "dependencies": {
-    "@electron/remote": "^2.1.1",
-    "instascan": "^1.0.0",
-    "jquery": "^3.7.1",
-    "md5": "^2.3.0",
-    "qrious": "^4.0.2",
-    "serialport": "^12.0.0",
-    "sqlite3": "^5.1.7"
+    "electron-packager": "^17.1.2",
+    "electron-wix-msi": "^5.0.0"
   }
 }
