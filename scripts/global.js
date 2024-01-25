@@ -308,14 +308,13 @@ const Librarium = {
     fetchAllRecords: ()=> {
         db.serialize(()=> {
             db.all("SELECT book_uuid, date_borrowed, date_returned, student_uuid FROM records", (err, rows)=> {
-                if(Librarium.recentDataTable != null) {
-                    Librarium.recentDataTable.destroy();
-                    $("#recent-data-tbody").empty();
-                }
-
                 if(!err && rows.length >= 1) {
-                    let hasHidden = false;
-                    rows.forEach(async (row)=> {
+                    if(Librarium.recentDataTable != null) {
+                        Librarium.recentDataTable.destroy();
+                        $("#recent-data-tbody").empty();
+                    }
+
+                    const tasks = rows.map(async (row)=> {
                         let due = Librarium.parseDateTimeString(row.date_borrowed);
                         due.setHours(due.getHours() + 24);
 
@@ -328,15 +327,14 @@ const Librarium = {
                             "</td></tr>";
 
                         $("#recent-data-tbody").append(recentDataRow);
-                        if(!hasHidden) {
-                            $("#recent-data-tbody td.dataTables_empty")
-                                .addClass("d-none");
-                            hasHidden = true;
-                        }
+                    });
+
+                    Promise.all(tasks).then(()=> {
+                        Librarium.recentDataTable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
+                        $("#recent-data-tbody td.dataTables_empty")
+                            .addClass("d-none");
                     });
                 }
-
-                Librarium.recentDataTable = Librarium.initDataTable("#recent-data-table", "No recent transaction data found.");
             });
         });
 
