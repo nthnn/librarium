@@ -205,9 +205,12 @@
                             </h1>
                             <hr/>
 
-                            <select id="available-cameras" class="form-control w-100">
+                            <div class="btn-group w-100" role="group" aria-label="Basic example">
+                            <select id="available-cameras" class="form-control">
                                 <option disabled selected>No available cameras.</option>
                             </select>
+                            <button type="button" class="btn btn-primary" onclick="Librarium.scanCameras()">Refresh</button>
+                        </div>
 
                             <center>
                                 <video id="preview" class="mt-2 rounded"></video>

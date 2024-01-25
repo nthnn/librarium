@@ -20,6 +20,8 @@ const Librarium = {
     bookUuid: null,
     studentUuid: null,
 
+    scanner: null,
+
     generateUuid: ()=> {
         const getRandomHexDigit = ()=> Math.floor(Math.random() * 16).toString(16),
             getRandomHexBlock = ()=> (
@@ -380,16 +382,7 @@ const Librarium = {
         });
     },
 
-    startScanner: (scanEvt, errorEvt)=> {
-        let args = {video: document.getElementById("preview")};
-        window.URL.createObjectURL = (stream) => {
-            args.video.srcObject = stream;
-            return stream;
-        };
-
-        let scanner = new Instascan.Scanner(args);
-        scanner.addListener("scan", (content)=> scanEvt(content));
-
+    scanCameras: (scanEvt, errorEvt)=> {
         let cameraObjs = [];
         Instascan.Camera.getCameras().then((cameras)=> {
             if(cameras.length > 0) {
@@ -408,12 +401,32 @@ const Librarium = {
             $("#available-cameras").html(cameraList);
             $("#available-cameras option").last().attr("selected", "selected");
 
-            scanner.start(cameraObjs.at(-1));
+            Librarium.scanner.start(cameraObjs.at(-1));
         }).catch((e)=> errorEvt(e));
 
         $("#available-cameras").on("change", ()=> {
             let selectedCamera = $("#available-cameras option:selected").val();
-            scanner.stop().then(()=> scanner.start(cameraObjs[parseInt(selectedCamera)]));
+            Librarium.scanner.stop().then(()=>
+                Librarium.scanner.start(cameraObjs[parseInt(selectedCamera)]));
+        });
+    },
+
+    startScanner: (scanEvt, errorEvt)=> {
+        let args = {video: document.getElementById("preview")};
+        window.URL.createObjectURL = (stream) => {
+            args.video.srcObject = stream;
+            return stream;
+        };
+
+        Librarium.scanner = new Instascan.Scanner(args);
+        Librarium.scanner.addListener("scan", (content)=> scanEvt(content));
+
+        const fnScan = ()=> Librarium.scanCameras(scanEvt, errorEvt);
+        fnScan();
+
+        $("#refresh-cams-btn").click(()=> {
+            Librarium.scanner.stop();
+            fnScan();
         });
     },
 
