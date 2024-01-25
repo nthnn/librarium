@@ -1,14 +1,16 @@
 window.jQuery = window.$ = require("jquery");
 
+const path = require("path");
 const sqlite3 = require("sqlite3");
 const md5 = require("md5");
 const Instascan = require("instascan");
 const Qrious = require("qrious");
 const SPort = require("serialport");
+
 const SerialPort = SPort.SerialPort;
 const ReadlineParser = SPort.ReadlineParser;
 
-let db = new sqlite3.Database("librarium.db");
+let db = new sqlite3.Database(path.join(__dirname.replace("app.asar", ""), "librarium.db"));
 let tobeDeletedBook = null,
     tobeDeletedStudent = null;
 
