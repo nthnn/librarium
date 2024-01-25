@@ -328,7 +328,6 @@ const Librarium = {
                             "</td></tr>";
 
                         $("#recent-data-tbody").append(recentDataRow);
-
                         if(!hasHidden) {
                             $("#recent-data-tbody td.dataTables_empty")
                                 .addClass("d-none");
