@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/nthnn/librarium#readme",
   "dependencies": {
-    "electron-packager": "^17.1.2",
-    "electron-wix-msi": "^5.0.0"
+    "electron-packager": "^17.1.2"
   }
 }
