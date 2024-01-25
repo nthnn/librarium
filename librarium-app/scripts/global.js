@@ -350,6 +350,8 @@ const Librarium = {
             );
 
             db.all("SELECT date_borrowed, date_returned FROM records WHERE date_returned <> \"-\"", (err, rows)=> {
+                $("#total-returned").html("0");
+
                 if(!err && rows.length > 0) {
                     $("#total-returned").html(rows.length);
 
@@ -366,9 +368,9 @@ const Librarium = {
             });
 
             db.all("SELECT num_copies FROM books", (err, rows)=> {
-                if(!err && rows.length > 0) {
-                    $("#num-of-stocks").html("0");
+                $("#num-of-stocks").html("0");
 
+                if(!err && rows.length > 0) {
                     rows.forEach((row)=> {
                         let currentValue = parseInt($("#num-of-stocks").html());
                         $("#num-of-stocks").html(currentValue + row.num_copies);
@@ -528,6 +530,41 @@ const Librarium = {
         });
     },
 
-    manuallyRecord: ()=> {
+    listBooks: async ()=> {
+        return new Promise((resolve, reject) => {
+            db.all("SELECT title, uuid FROM books", (err, rows)=> {
+                let bookMap = [];
+
+                if(!err)
+                    rows.forEach((row)=> bookMap.push([row.title, row.uuid]));
+                resolve(bookMap);
+            });
+        });
+    },
+
+    listStudents: async ()=> {
+        return new Promise((resolve, reject) => {
+            db.all("SELECT name, uuid FROM students", (err, rows)=> {
+                let studentMap = [];
+
+                if(!err)
+                    rows.forEach((row)=> studentMap.push([row.name, row.uuid]));
+                resolve(studentMap);
+            });
+        });
+    },
+
+    manualRecord: ()=> {
+        Librarium.processTransaction(
+            $("#manual-book option:selected").val(),
+            $("#manual-student option:selected").val(),
+            (_)=> {
+                $("#manual-record-modal").modal("hide");
+                $("#manual-record-success-modal").modal("show");
+
+                Librarium.fetchAllRecords();
+            },
+            ()=> {}
+        );
     }
 };

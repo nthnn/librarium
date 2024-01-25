@@ -166,4 +166,21 @@ $(document).ready(()=> {
             ()=> showErrorMessage("changed-password", "Password was successfully changed.")
         );
     });
+
+    $("#manual-record").click(async ()=> {
+        let bookMap = await Librarium.listBooks(),
+            studentMap = await Librarium.listStudents();
+
+        $("#manual-book").html("<option disabled selected>Select Book</option>");
+        bookMap.forEach((book)=>
+            $("#manual-book").append("<option value=\"" +
+            book[1] + "\">" + book[0] + "</option>"));
+
+        $("#manual-student").html("<option disabled selected>Select Student</option>");
+        studentMap.forEach((student)=>
+            $("#manual-student").append("<option value=\"" +
+            student[1] + "\">" + student[0] + "</option>"));
+
+        $("#manual-record-modal").modal("show");
+    });
 });

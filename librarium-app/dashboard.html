@@ -135,7 +135,7 @@
 
                             <div class="row mt-2">
                                 <div class="col-6">
-                                    <button type="button" class="btn btn-outline-dark w-100">Manual Recording</button>
+                                    <button type="button" class="btn btn-outline-dark w-100" id="manual-record">Manual Recording</button>
                                 </div>
 
                                 <div class="col-6">
@@ -338,6 +338,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">Records has been successfully removed from the database!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="manual-record-modal" tabindex="-1" aria-labelledby="manual-record-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="manual-record-modalLabel">Manual Recording</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="manual-book" class="form-label">Book</label>
+                    <select class="form-control" id="manual-book"></select>
+
+                    <label for="manual-student" class="form-label mt-2">Student</label>
+                    <select class="form-control" id="manual-student"></select>
+
+                    <p id="manual-record-error" class="text-primary d-none mt-2 mb-0 pb-0"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+                    <button id="manual-record-btn" type="button" class="btn btn-dark" onclick="Librarium.manualRecord()">Record</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="manual-record-success-modal" tabindex="-1" aria-labelledby="manual-record-success-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="manual-record-success-modalLabel">Successfully Recorded</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Successful manual recording of book transaction!</div>
             </div>
         </div>
     </div>
