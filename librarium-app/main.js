@@ -7,7 +7,7 @@ app.on('ready', ()=> {
         width: 1100,
         height: 700,
         autoHideMenuBar: true,
-        icon: "assets/ic-librarium.ico",
+        icon: "assets/librarium-logo.ico",
         title: "Librarium",
         titleBarOverlay: {
             color: "#fff",
