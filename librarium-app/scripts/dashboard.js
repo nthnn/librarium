@@ -21,12 +21,17 @@ $(document).ready(()=> {
     Librarium.studentsTable = Librarium.initDataTable("#students-table", "No students found.");
 
     let recentScanned = null;
-    Librarium.startScanner(
-        (scanned)=> recentScanned = scanned,
-        (_)=> {}
-    );
-
     Librarium.listSerialPort((ports)=> {
+        if(ports.length == 0) {
+            setTimeout(()=> $("#no-device-found-modal").modal("show"), 2000);
+            return;
+        }
+
+        Librarium.startScanner(
+            (scanned)=> recentScanned = scanned,
+            (_)=> $("#no-webcam-found-modal").modal("show")
+        );
+
         let device = Librarium.openSerialPort(ports.at(-1), (data)=> {
             if(Librarium.bookUuid == null && recentScanned != null) {
                 Librarium.bookUuid = recentScanned;
