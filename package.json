@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pack": "node index.js",
-    "build": "npx electron-packager ./librarium-app librarium --overwrite --appname Librarium --asar --extraResource=librarium-app/librarium.db --platform=win32 --arch=x64",
+    "build": "npx electron-packager ./librarium-app librarium --overwrite --appname Librarium --asar --extraResource=librarium-app/librarium.db",
     "start": "cd librarium-app && npm run start"
   },
   "repository": {
