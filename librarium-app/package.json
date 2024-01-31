@@ -5,7 +5,7 @@
   "main": "main.js",
   "arch": "x64",
   "scripts": {
-    "start": "electron ."
+    "start": "electron . --no-sandbox"
   },
   "repository": {
     "type": "git",
