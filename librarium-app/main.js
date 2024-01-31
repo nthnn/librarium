@@ -3,11 +3,12 @@ require('@electron/remote/main').initialize();
 
 app.on('ready', ()=> {
     let mainWindow = new BrowserWindow({
-        width: 1100,
-        height: 700,
+        width: 1300,
+        height: 720,
         autoHideMenuBar: true,
         icon: "assets/librarium-logo.ico",
         title: "Librarium",
+        resizable: false,
         titleBarOverlay: {
             color: "#fff",
             symbolColor: "#1a1a1a",
