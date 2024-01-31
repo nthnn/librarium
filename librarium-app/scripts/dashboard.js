@@ -31,7 +31,7 @@ $(document).ready(()=> {
             (scanned)=> recentScanned = scanned,
             (_)=> $("#no-webcam-found-modal").modal("show")
         );
-
+    
         let device = Librarium.openSerialPort(ports.at(-1), (data)=> {
             if(Librarium.bookUuid == null && recentScanned != null) {
                 Librarium.bookUuid = recentScanned;
