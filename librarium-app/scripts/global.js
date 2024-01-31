@@ -79,6 +79,7 @@ const Librarium = {
                     successEvent();
                     return;
                 }
+
                 errEvent();
             })
         });
@@ -350,37 +351,50 @@ const Librarium = {
         db.serialize(()=> {
             db.all(
                 "SELECT * FROM records",
-                (_, rows)=> $("#total-borrowed").html(rows.length)
-            );
+                (_, rows1)=> {
+                    $("#total-borrowed").html(rows1.length);
 
-            db.all("SELECT date_borrowed, date_returned FROM records WHERE date_returned <> \"-\"", (err, rows)=> {
-                $("#total-returned").html("0");
+                    db.all("SELECT date_borrowed, date_returned FROM records WHERE date_returned <> \"-\"", (_, rows2)=> {
+                        $("#total-returned").html("0");
 
-                if(!err && rows.length > 0) {
-                    $("#total-returned").html(rows.length);
-
-                    rows.forEach((row)=> {
-                        if(Librarium.isPast24Hours(
-                            Librarium.parseDateTimeString(row.date_borrowed),
-                            Librarium.parseDateTimeString(row.date_returned)
-                        )) {
-                            let currentValue = parseInt($("#overdue-books").html());
-                            $("#overdue-books").html(currentValue + 1);
+                        if(rows2.length > 0) {
+                            $("#total-returned").html(rows2.length);
+        
+                            rows2.forEach((row)=> {
+                                if(Librarium.isPast24Hours(
+                                    Librarium.parseDateTimeString(row.date_borrowed),
+                                    Librarium.parseDateTimeString(row.date_returned)
+                                )) {
+                                    let currentValue = parseInt($("#overdue-books").html());
+                                    $("#overdue-books").html(currentValue + 1);
+                                }
+                            });
                         }
+
+                        new Promise((resolve, reject) => {
+                            db.all("SELECT num_copies FROM books", (_, rows3) => {
+                                if(rows3)
+                                    resolve(rows3);
+                                else reject("Error: Unable to fetch books");
+                            });
+                        }).then(rows3 => {
+                            $("#num-of-stocks").html("0");
+                    
+                            if(rows3.length > 0) {
+                                let promises = rows3.map(row => {
+                                    return new Promise(resolve => resolve(row.num_copies));
+                                });
+                    
+                                return Promise.all(promises);
+                            }
+                            else return Promise.resolve([]);
+                        }).then(copies => {
+                            let total = copies.reduce((acc, curr) => acc + curr, 0);
+                            $("#num-of-stocks").html(total - (rows1.length - rows2.length));
+                        });
                     });
                 }
-            });
-
-            db.all("SELECT num_copies FROM books", (err, rows)=> {
-                $("#num-of-stocks").html("0");
-
-                if(!err && rows.length > 0) {
-                    rows.forEach((row)=> {
-                        let currentValue = parseInt($("#num-of-stocks").html());
-                        $("#num-of-stocks").html(currentValue + row.num_copies);
-                    });
-                }
-            });
+            );
         });
     },
 
