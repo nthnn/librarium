@@ -188,4 +188,6 @@ $(document).ready(()=> {
 
         $("#manual-record-modal").modal("show");
     });
+
+    $("#logout-btn").on("click", ()=> ipcRenderer.send('restart'));
 });
