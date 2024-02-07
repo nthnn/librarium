@@ -1,11 +1,11 @@
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 require('@electron/remote/main').initialize();
 
 let mainWindow;
 function createWindow() {
     let mainWindow = new BrowserWindow({
-        width: 1300,
-        height: 720,
+        width: 1250,
+        height: 700,
         autoHideMenuBar: true,
         icon: "assets/librarium-logo.ico",
         title: "Librarium",
@@ -28,7 +28,7 @@ function createWindow() {
         globalShortcut.register("Command+W", () => { return false; });
     }
     else {
-        globalShortcut.register("Control+Shift+I", () => { return false; });
+        //globalShortcut.register("Control+Shift+I", () => { return false; });
         globalShortcut.register("Control+R", () => { return false; });
         globalShortcut.register("Control+W", () => { return false; });
     }
