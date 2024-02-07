@@ -1,7 +1,8 @@
 const { app, BrowserWindow, globalShortcut } = require('electron');
 require('@electron/remote/main').initialize();
 
-app.on('ready', ()=> {
+let mainWindow;
+function createWindow() {
     let mainWindow = new BrowserWindow({
         width: 1300,
         height: 720,
@@ -34,7 +35,9 @@ app.on('ready', ()=> {
 
     mainWindow.loadFile("index.html");
     mainWindow.on("closed", () => mainWindow = null);
-});
+}
+
+app.on('ready', createWindow);
 
 app.on("browser-window-created", (_, window) => {
     require("@electron/remote/main").enable(window.webContents);
@@ -43,4 +46,9 @@ app.on("browser-window-created", (_, window) => {
 app.on("window-all-closed", () => {
     if(process.platform !== "darwin")
         app.quit();
+});
+
+ipcMain.on("restart", () => {
+    app.relaunch();
+    app.quit();
 });
