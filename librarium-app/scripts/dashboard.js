@@ -1,3 +1,4 @@
+const { ipcRenderer } = require('electron');
 const showErrorMessage = (id, message)=> {
     $("#" + id + "-error").html(message);
     $("#" + id + "-error").removeClass("d-none");
